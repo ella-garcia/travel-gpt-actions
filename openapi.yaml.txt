@@ -1,14 +1,14 @@
 openapi: 3.1.0
 info:
-  title: YouTube Proxy API
+  title: YouTube Embeddable Video Search
   version: 1.0.0
-  description: Proxy API for searching YouTube videos securely via Vercel.
+  description: Securely search and retrieve embeddable YouTube videos via Vercel proxy.
 servers:
   - url: https://your-vercel-project.vercel.app
 paths:
   /api/youtube:
     get:
-      summary: Search YouTube videos via proxy
+      summary: Search YouTube videos via proxy and return only public embeddable videos
       operationId: searchYouTube
       parameters:
         - name: q
@@ -26,24 +26,20 @@ paths:
             default: 5
       responses:
         "200":
-          description: Successful YouTube search
+          description: Successful YouTube video search
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  kind:
-                    type: string
                   items:
                     type: array
                     items:
                       type: object
                       properties:
                         id:
-                          type: object
-                          properties:
-                            videoId:
-                              type: string
+                          type: string
+                          description: The YouTube video ID
                         snippet:
                           type: object
                           properties:
@@ -51,23 +47,25 @@ paths:
                               type: string
                             description:
                               type: string
+                            channelTitle:
+                              type: string
                             thumbnails:
                               type: object
                               properties:
-                                default:
-                                  type: object
-                                  properties:
-                                    url:
-                                      type: string
-                                medium:
-                                  type: object
-                                  properties:
-                                    url:
-                                      type: string
                                 high:
                                   type: object
                                   properties:
                                     url:
                                       type: string
-                            channelTitle:
+                        status:
+                          type: object
+                          properties:
+                            embeddable:
+                              type: boolean
+                            privacyStatus:
+                              type: string
+                        player:
+                          type: object
+                          properties:
+                            embedHtml:
                               type: string
