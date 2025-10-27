@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: YouTube Video Search
+  version: 1.0.0
+servers:
+  - url: https://www.googleapis.com/youtube/v3
+paths:
+  /search:
+    get:
+      summary: Search YouTube videos by keyword
+      operationId: searchYouTube
+      parameters:
+        - name: part
+          in: query
+          required: true
+          schema:
+            type: string
+            default: snippet
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query term (e.g. "Rome travel food")
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            default: video
+        - name: maxResults
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+        - name: key
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of YouTube videos
+          content:
+            application/json:
+              schema:
+                type: object
