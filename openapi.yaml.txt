@@ -1,32 +1,32 @@
 openapi: 3.1.0
 info:
-  title: YouTube Embeddable Video Search
+  title: YouTube Video Search Proxy
   version: 1.0.0
-  description: Securely search and retrieve embeddable YouTube videos via a Vercel proxy.
+  description: Returns public, embeddable YouTube videos with metadata for travel itinerary generation.
 servers:
-  - url: https://travel-gpt-actions.vercel.app
+  - url: https://your-vercel-project.vercel.app
 paths:
   /api/youtube:
     get:
-      summary: Search YouTube videos via proxy and return only public, embeddable videos
+      summary: Search YouTube videos via proxy
       operationId: searchYouTube
       parameters:
         - name: q
           in: query
           required: true
-          description: Search query term (e.g., "paris travel food")
+          description: Search term (e.g., "Copenhagen travel vlog")
           schema:
             type: string
         - name: maxResults
           in: query
           required: false
-          description: Number of videos to return
+          description: Maximum number of videos to return
           schema:
             type: integer
             default: 5
       responses:
         "200":
-          description: Successful video search
+          description: List of embeddable YouTube videos
           content:
             application/json:
               schema:
@@ -38,7 +38,10 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
+                          type: object
+                          properties:
+                            videoId:
+                              type: string
                         snippet:
                           type: object
                           properties:
@@ -47,24 +50,4 @@ paths:
                             description:
                               type: string
                             channelTitle:
-                              type: string
-                            thumbnails:
-                              type: object
-                              properties:
-                                high:
-                                  type: object
-                                  properties:
-                                    url:
-                                      type: string
-                        status:
-                          type: object
-                          properties:
-                            embeddable:
-                              type: boolean
-                            privacyStatus:
-                              type: string
-                        player:
-                          type: object
-                          properties:
-                            embedHtml:
                               type: string
