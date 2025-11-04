@@ -7,10 +7,10 @@ info:
     Returns only playable, public, embeddable content for use in Michelin Travel GPT.
 
 servers:
-  - url: https://travel-gpt-actions.vercel.app/   # Replace with your real deployment domain
+  - url: https://travel-gpt-actions.vercel.app/api  # Correct: No trailing slash, points to /api
 
 paths:
-  /searchYouTube:
+  /youtube:
     get:
       operationId: search_youtube_vlogs
       summary: Search YouTube for food/travel vlogs
