@@ -1,16 +1,16 @@
 openapi: 3.1.0
 info:
-  title: YouTube Search Action
-  version: 1.0.1
+  title: Michelin Travel GPT Combined Actions
+  version: 1.0.0
   description: >
-    Searches YouTube for embeddable, public videos via a hosted endpoint.
-    Returns only playable, public, embeddable content for use in Michelin Travel GPT.
+    Combined OpenAPI specification for the Michelin Travel GPT custom assistant.
+    Includes both YouTube Search and Google Places proxy endpoints hosted on the same domain.
 
 servers:
-  - url: https://travel-gpt-actions.vercel.app/api  # Live URL
+  - url: https://travel-gpt-actions.vercel.app/api
 
 paths:
-  /youtube:  # Matches your deployed file name: /api/youtube.js
+  /youtube:
     get:
       operationId: search_youtube_vlogs
       summary: Search YouTube for food/travel vlogs
@@ -22,7 +22,7 @@ paths:
           required: true
           schema:
             type: string
-          description: Search query, e.g. "Disfrutar Barcelona Michelin vlog"
+          description: Search query, e.g., "Disfrutar Barcelona Michelin vlog"
         - in: query
           name: maxResults
           required: false
@@ -75,3 +75,48 @@ paths:
                                       type: string
                             channelTitle:
                               type: string
+
+  /google-places:
+    get:
+      operationId: find_place_from_text
+      summary: Find a place by text query (proxy)
+      description: >
+        Uses your Vercel proxy to fetch Google Places data without exposing the API key.
+      parameters:
+        - in: query
+          name: input
+          required: true
+          schema:
+            type: string
+          description: Search text, e.g., "Disfrutar Barcelona"
+        - in: query
+          name: inputtype
+          required: false
+          schema:
+            type: string
+            default: textquery
+        - in: query
+          name: fields
+          required: false
+          schema:
+            type: string
+            default: place_id,name,formatted_address
+      responses:
+        "200":
+          description: Google Places result via proxy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        place_id:
+                          type: string
+                        name:
+                          type: string
+                        formatted_address:
+                          type: string
