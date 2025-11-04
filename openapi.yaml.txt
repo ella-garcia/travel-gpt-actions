@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
   title: YouTube Search Action
-  version: "1.0.0"
+  version: "1.0.1"
   description: >
     Searches YouTube for embeddable, public videos via a hosted endpoint.
     Returns only playable, public, embeddable content for use in Michelin Travel GPT.
 
 servers:
-  - url: https://travel-gpt-actions.vercel.app/api  # Correct: No trailing slash, points to /api
+  - url: https://travel-gpt-actions.vercel.app/api  # Correct Vercel deployment path
 
 paths:
   /youtube:
