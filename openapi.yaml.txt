@@ -1,32 +1,38 @@
 openapi: 3.1.0
 info:
-  title: YouTube Video Search Proxy
-  version: 1.0.0
-  description: Returns public, embeddable YouTube videos with metadata for travel itinerary generation.
+  title: YouTube Search Action
+  version: "1.0.0"
+  description: >
+    Searches YouTube for embeddable, public videos via a hosted endpoint.
+    Returns only playable, public, embeddable content for use in Michelin Travel GPT.
+
 servers:
-  - url: https://your-vercel-project.vercel.app
+  - url: https://travel-gpt-actions.vercel.app/   # Replace with your real deployment domain
+
 paths:
-  /api/youtube:
+  /searchYouTube:
     get:
-      summary: Search YouTube videos via proxy
-      operationId: searchYouTube
+      operationId: search_youtube_vlogs
+      summary: Search YouTube for food/travel vlogs
+      description: >
+        Calls your hosted YouTube search API endpoint. Filters out non-public and non-embeddable videos automatically.
       parameters:
-        - name: q
-          in: query
+        - in: query
+          name: q
           required: true
-          description: Search term (e.g., "Copenhagen travel vlog")
           schema:
             type: string
-        - name: maxResults
-          in: query
+          description: Search query, e.g. "Disfrutar Barcelona Michelin vlog"
+        - in: query
+          name: maxResults
           required: false
-          description: Maximum number of videos to return
           schema:
             type: integer
             default: 5
+          description: Number of results to fetch (default 5)
       responses:
         "200":
-          description: List of embeddable YouTube videos
+          description: A JSON list of public, embeddable YouTube videos
           content:
             application/json:
               schema:
@@ -49,5 +55,23 @@ paths:
                               type: string
                             description:
                               type: string
+                            thumbnails:
+                              type: object
+                              properties:
+                                default:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                medium:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                high:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
                             channelTitle:
                               type: string
