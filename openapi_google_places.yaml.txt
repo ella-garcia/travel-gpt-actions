@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Google Places Action
+  version: 1.0.0
+  description: >
+    Retrieves restaurant and hotel details such as address, phone number, website, and opening hours
+    using the Google Places API. Used by Michelin Travel GPT to enrich recommendations with live data.
+
+servers:
+  - url: https://maps.googleapis.com/maps/api/place
+
+paths:
+  /findplacefromtext/json:
+    get:
+      operationId: find_place_from_text
+      summary: Find a place by text query
+      description: >
+        Searches Google Places by restaurant or hotel name and returns the best matching Place ID.
+      parameters:
+        - in: query
+          name: input
+          required: true
+          schema:
+            type: string
+          description: Search text, e.g., "Disfrutar Barcelona"
+        - in: query
+          name: inputtype
+          required: true
+          schema:
+            type: string
+            default: textquery
+          description: Input type — always "textquery".
+        - in: query
+          name: fields
+          required: false
+          schema:
+            type: string
+            default: place_id,name,formatted_address
+          description: Fields to return from the find-place result.
+        - in: query
+          name: key
+          required: true
+          schema:
+            type: string
+          description: Your Google Places API key.
+      responses:
+        "200":
+          description: Returns place candidates with Place IDs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        place_id:
+                          type: string
+                        name:
+                          type: string
+                        formatted_address:
+                          type: string
+
+  /details/json:
+    get:
+      operationId: get_place_details
+      summary: Get detailed information about a place
+      description: >
+        Returns detailed information about a restaurant or hotel using its Place ID,
+        including name, address, phone number, website, rating, and opening hours.
+      parameters:
+        - in: query
+          name: place_id
+          required: true
+          schema:
+            type: string
+          description: The Google Place ID to retrieve details for.
+        - in: query
+          name: fields
+          required: false
+          schema:
+            type: string
+            default: name,formatted_address,formatted_phone_number,website,opening_hours,rating
+          description: Fields to include in the detailed response.
+        - in: query
+          name: key
+          required: true
+          schema:
+            type: string
+          description: Your Google Places API key.
+      responses:
+        "200":
+          description: Returns detailed information about the requested place.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      formatted_address:
+                        type: string
+                      formatted_phone_number:
+                        type: string
+                      website:
+                        type: string
+                      opening_hours:
+                        type: object
+                        properties:
+                          weekday_text:
+                            type: array
+                            items:
+                              type: string
+                      rating:
+                        type: number
